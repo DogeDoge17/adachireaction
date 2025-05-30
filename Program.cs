@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Fonts;
 using Quill.Pages;
+using Quill;
 
 internal class Program
 {
@@ -21,6 +22,7 @@ internal class Program
             new(Path.Assembly / "lang/fr.txt", "fr", 5.0),  // french
         ];
 
+        DriverCreation.options.headless = false;
         TwitterBot adachi = new(TimeSpan.FromMinutes(60)) { DisplayName = "Adachi Reaction" };
         adachi.runAction += Run;
 
@@ -59,10 +61,10 @@ internal class Program
             /// Handles the variables the bot uses to put onto the image               
 
             var word = lang.GetWord();
-            //var word = DrawingHelper.CustomWord($"CUSTOMWORD");
+            //var word = DrawingHelper.CustomWord($"DEADBEAT");
 
             using Image<Rgba32> adachiPort = DrawingHelper.GetRandomImage();
-            //using Image adachiPort = DrawingHelper.CustomImage(AdachiExpressions.CrazySmile);
+            //using Image adachiPort = DrawingHelper.CustomImage(AdachiExpressions.ShadowMad);
 
             Color textColor = DrawingHelper.RandomColour(151);
             //Color textColor = Color.DarkRed;
