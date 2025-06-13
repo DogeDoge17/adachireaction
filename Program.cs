@@ -11,9 +11,9 @@ using Quill;
 
 internal class Program
 {
-    private static Language[] langs;
+    private static Language[]? langs;
 
-    private static void Main(string[] args)
+    private static void Main()
     {
         langs =
         [
@@ -24,12 +24,12 @@ internal class Program
 
         DriverCreation.options.headless = false;
         TwitterBot adachi = new(TimeSpan.FromMinutes(60)) { DisplayName = "Adachi Reaction" };
-        adachi.runAction += Run;
+        adachi.RunAction += Run;
 
         adachi.Start();
     }
 
-    static float GetFontSize(string input, Font font, Language lang)
+    static float GetFontSize(string input, Font font)
     {
         float fontSize = input.Any(chr => char.ConvertToUtf32(input, input.IndexOf(chr)) > 127) ? 21 : 150;
 
@@ -51,10 +51,13 @@ internal class Program
     }
 
 
-    private static void Run(ComposePage composer, string[] args)
+    private static void Run(ComposePage composer, string[]? args)
     {
         try
         {
+            if (langs is null)
+                return;
+
             Language lang = Language.RollChances(langs.ToList());
 
             ///--------               
@@ -88,7 +91,7 @@ internal class Program
             collection.Add(Path.Assembly / "comic.ttf");
             FontFamily family = collection.Get("Comic Sans MS");
             Font font = family.CreateFont(150, FontStyle.Regular);
-            font = family.CreateFont(GetFontSize(word.formatted, font, lang), FontStyle.Regular);
+            font = family.CreateFont(GetFontSize(word.formatted, font), FontStyle.Regular);
 
             RichTextOptions textOptions = new RichTextOptions(font)
             {
@@ -102,7 +105,7 @@ internal class Program
 
             Output.WriteLine($"Tweeting \"{word.raw}\" from lang \"{lang.code}\"");
 
-            composer.Tweet(word.raw, Path.Assembly / "output.png");
+            _ = composer.Tweet(word.raw, Path.Assembly / "output.png");
             Output.WriteLine("finished tweeting");
         }
         catch { }
